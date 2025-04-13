@@ -15,15 +15,25 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
+  id            String        @id @default(cuid())
+  email         String        @unique
   name          String?
+  username      String?       @unique
+  phone         String?       @unique
   emailVerified Boolean
   image         String?
   createdAt     DateTime
   updatedAt     DateTime
+  isSuspended   Boolean       @default(false)
+  suspendedAt   DateTime?
+  isBanned      Boolean       @default(false)
+  bannedAt      DateTime?
+  banReason     String?
   sessions      Session[]
   accounts      Account[]
+  reports       UserReport[]  @relation("ReportedUser")
+  reportsFiled  UserReport[]  @relation("ReportingUser")
+  gameHistory   GameHistory[]
 
   @@map("user")
 }
@@ -71,4 +81,44 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
+}
+
+model UserReport {
+  id          String   @id @default(cuid())
+  reportedId  String
+  reporterId  String
+  reason      String
+  description String?
+  status      String   @default("PENDING") // PENDING, RESOLVED, DISMISSED
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  reported    User     @relation("ReportedUser", fields: [reportedId], references: [id])
+  reporter    User     @relation("ReportingUser", fields: [reporterId], references: [id])
+
+  @@map("user_report")
+}
+
+enum GameType {
+  STANDARD
+  CHESS960
+}
+
+enum GameResult {
+  WIN
+  LOSS
+  DRAW
+}
+
+model GameHistory {
+  id          String     @id @default(cuid())
+  userId      String
+  gameType    GameType
+  wagerAmount Decimal?
+  result      GameResult
+  startedAt   DateTime
+  endedAt     DateTime?
+  createdAt   DateTime   @default(now())
+  user        User       @relation(fields: [userId], references: [id])
+
+  @@map("game_history")
 }
