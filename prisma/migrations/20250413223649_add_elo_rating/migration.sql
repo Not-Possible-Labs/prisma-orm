@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "user" ADD COLUMN     "eloRating" INTEGER NOT NULL DEFAULT 1200;

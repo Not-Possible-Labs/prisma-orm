@@ -22,6 +22,12 @@ model User {
   phone         String?       @unique
   emailVerified Boolean
   image         String?
+  eloRating     Int           @default(1200)
+  // Address information
+  address       String?
+  zipCode       String?
+  city          String?
+  state         String?
   createdAt     DateTime
   updatedAt     DateTime
   isSuspended   Boolean       @default(false)

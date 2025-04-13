@@ -25,6 +25,12 @@ async function main() {
           phone: falso.randPhoneNumber(),
           name: falso.randFullName({ withAccents: false }),
           emailVerified: falso.randBoolean(),
+          eloRating: Math.floor(Math.random() * (2000 - 800 + 1)) + 800, // Random rating between 800 and 2000
+          // Address information
+          address: falso.randStreetAddress(),
+          zipCode: falso.randZipCode(),
+          city: falso.randCity(),
+          state: falso.randStateAbbr(),
           isSuspended,
           suspendedAt: isSuspended ? new Date() : null,
           isBanned,
