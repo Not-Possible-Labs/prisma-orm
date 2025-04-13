@@ -23,6 +23,9 @@
     "prisma": "^6.5.0"
   },
   "dependencies": {
-    "@prisma/client": "^6.5.0"
+    "@ngneat/falso": "^7.3.0",
+    "@paralleldrive/cuid2": "^2.2.2",
+    "@prisma/client": "^6.5.0",
+    "better-auth": "^1.2.7"
   }
 }

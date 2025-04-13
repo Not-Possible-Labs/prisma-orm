@@ -1,36 +1,32 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const falso = require("@ngneat/falso");
+const cuid = require("../helpers/cuid2");
 
 async function main() {
   // Clear existing data
   await prisma.user.deleteMany({});
-  
-  console.log('Start seeding...');
-  
-  // Create sample users
-  const users = await Promise.all([
-    prisma.user.create({
-      data: {
-        email: 'alice@example.com',
-        name: 'Alice Johnson'
-      }
-    }),
-    prisma.user.create({
-      data: {
-        email: 'bob@example.com',
-        name: 'Bob Smith'
-      }
-    }),
-    prisma.user.create({
-      data: {
-        email: 'charlie@example.com',
-        name: 'Charlie Garcia'
-      }
-    })
-  ]);
-  
+
+  console.log("Start seeding...");
+
+  // Create 5 sample users using a loop
+  const users = await Promise.all(
+    Array.from({ length: 5 }, () =>
+      prisma.user.create({
+        data: {
+          id: cuid(),
+          email: falso.randEmail(),
+          name: falso.randFullName({ withAccents: false }),
+          emailVerified: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      })
+    )
+  );
+
   console.log(`Created ${users.length} users`);
-  console.log('Seeding finished');
+  console.log("Seeding finished");
 }
 
 main()
